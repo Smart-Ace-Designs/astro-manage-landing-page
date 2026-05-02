@@ -1,5 +1,5 @@
 ---
-import Social from "./Social.astro";
+import Social from "@/components/Social.astro";
 ---
 
 <footer class="bg-theme-very-dark-blue">
@@ -16,31 +16,11 @@ import Social from "./Social.astro";
         <img src="/logo-white.svg" alt="Logo" />
       </div>
       <div class="flex justify-center space-x-4">
-        <Social
-          link="https://www.facebook.com"
-          image="/icon-facebook.svg"
-          alt="facebook"
-        />
-        <Social
-          link="https://www.youtube.com"
-          image="/icon-youtube.svg"
-          alt="youtube"
-        />
-        <Social
-          link="https://www.x.com"
-          image="/icon-twitter.svg"
-          alt="twitter"
-        />
-        <Social
-          link="https://www.pinterest.com"
-          image="/icon-pinterest.svg"
-          alt="pinterest"
-        />
-        <Social
-          link="https://www.instagram.com"
-          image="/icon-instagram.svg"
-          alt="instagram"
-        />
+        <Social link="https://www.facebook.com" image="/icon-facebook.svg" alt="facebook" />
+        <Social link="https://www.youtube.com" image="/icon-youtube.svg" alt="youtube" />
+        <Social link="https://www.x.com" image="/icon-twitter.svg" alt="twitter" />
+        <Social link="https://www.pinterest.com" image="/icon-pinterest.svg" alt="pinterest" />
+        <Social link="https://www.instagram.com" image="/icon-instagram.svg" alt="instagram" />
       </div>
     </div>
     <div class="flex justify-around space-x-32">
@@ -57,10 +37,10 @@ import Social from "./Social.astro";
       </div>
     </div>
     <div class="flex flex-col justify-between">
-      <form>
+      <form id="sub-form" novalidate>
         <div class="flex space-x-3">
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             class="flex-1 rounded-full bg-theme-very-light-gray px-4 focus:outline-hidden"
@@ -68,14 +48,71 @@ import Social from "./Social.astro";
             autocomplete="off"
           />
           <button
+            type="submit"
             class="rounded-full bg-theme-bright-red px-6 py-2 text-white hover:bg-theme-bright-red-light focus:outline-hidden"
             >Go</button
           >
         </div>
+        <p
+          class="invisible static mt-2 text-xs text-theme-bright-red"
+          id="message"
+          role="alert"
+          aria-live="polite"
+          id="message"
+        >
+          Please provide a valid email address
+        </p>
       </form>
-      <div class="hidden text-white md:block">
-        Copyright &copy; 2024, All Rights Reserved
-      </div>
+      <div class="hidden text-white md:block">Copyright &copy; 2024, All Rights Reserved</div>
     </div>
   </div>
 </footer>
+
+<script>
+  import { actions } from "astro:actions";
+  import Swal from "sweetalert2";
+
+  document.addEventListener("astro:page-load", () => {
+    const form = document.querySelector("#sub-form") as HTMLFormElement;
+    const emailInput = form?.querySelector("input") as HTMLInputElement;
+    const message = document.querySelector("#message") as HTMLParagraphElement;
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target as HTMLFormElement);
+      const { data, error } = await actions.subscribe(formData);
+
+      if (error) {
+        message.classList.remove("invisible");
+        message.classList.add("visible");
+        emailInput.setAttribute("aria-invalid", "true");
+        message.setAttribute("role", "alert");
+      } else {
+        message.classList.remove("visible");
+        message.classList.add("invisible");
+        message.removeAttribute("role");
+        emailInput.setAttribute("aria-invalid", "false");
+        form.reset();
+        Swal.fire({
+          title: "Success!",
+          text: `Your email "${data}" has been added to our notification list.`,
+          icon: "success",
+          buttonsStyling: false,
+          customClass: {
+            confirmButton:
+              "cursor-pointer rounded-sm px-6 py-3 shadow-lg outline-2 transition-colors duration-300 bg-theme-bright-red text-theme-very-light-gray hover:bg-theme-very-light-gray hover:text-theme-bright-red outline-theme-bright-red mb-6",
+          },
+        });
+      }
+    });
+
+    emailInput?.addEventListener("input", () => {
+      if (message.classList.contains("visible")) {
+        message.classList.remove("visible");
+        message.classList.add("invisible");
+        message.removeAttribute("role");
+        emailInput.setAttribute("aria-invalid", "false");
+      }
+    });
+  });
+</script>
