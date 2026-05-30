@@ -12,10 +12,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "10.1.1",
+    "@astrojs/node": "10.1.2",
     "@tailwindcss/vite": "^4.3.0",
-    "astro": "6.3.7",
-    "sweetalert2": "^11.26.24",
+    "astro": "6.4.2",
+    "sweetalert2": "^11.26.25",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
