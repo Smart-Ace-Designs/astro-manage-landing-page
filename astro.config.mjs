@@ -9,6 +9,16 @@ import node from "@astrojs/node";
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: [
+        "astro/virtual-modules/transitions-router.js",
+        "astro/virtual-modules/transitions-types.js",
+        "astro/virtual-modules/transitions-events.js",
+        "astro/virtual-modules/transitions-swap-functions.js",
+        "astro/actions/runtime/entrypoints/client.js",
+        "sweetalert2",
+      ],
+    },
   },
   output: "server",
   adapter: node({
