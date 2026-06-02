@@ -9,7 +9,7 @@ const { link, image, alt } = Astro.props;
 ---
 
 <div class="flex justify-center space-x-4">
-  <a href={link} target="_blank" referrerpolicy="no-referrer"
-    ><img src={image} alt={alt} /></a
-  >
+  <a href={link} target="_blank" referrerpolicy="no-referrer">
+    <img src={image} alt={alt} loading="lazy" />
+  </a>
 </div>
