@@ -12,8 +12,7 @@ interface Props {
 const { avatar, author, content, classes } = Astro.props;
 const images = import.meta.glob<{ default: ImageMetadata }>("@/assets/*.png");
 
-if (!images[avatar])
-  throw new Error(`"${avatar}" does not exist in glob: "@/assets/*.png}"`);
+if (!images[avatar]) throw new Error(`"${avatar}" does not exist in glob: "@/assets/*.png}"`);
 ---
 
 <div
@@ -22,12 +21,7 @@ if (!images[avatar])
     "flex-col items-center space-y-6 rounded-lg bg-theme-very-light-gray p-6 md:w-1/3",
   ]}
 >
-  <Image
-    src={images[avatar]()}
-    alt="Avatar"
-    loading={"lazy"}
-    class="-mt-14 w-16"
-  />
+  <Image src={images[avatar]()} alt="Avatar" loading={"lazy"} class="-mt-14 w-16" />
   <h5 class="text-lg font-bold">{author}</h5>
   <p class="text-sm text-theme-dark-grayish-blue">{content}</p>
 </div>
